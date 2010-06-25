@@ -1,0 +1,5 @@
+simple_bayesian consists of a simple bayes classifier which tries to fit one of the three curves based on the input values, the input values have to be passed in this fashion :
+
+x1 f(x1) x2 f(x2) x3 f(x3) ........... xn f(xn) 
+
+in the present case n is configured to be 10, so you have to give 20 values as input
