@@ -9,7 +9,10 @@ number of pixels in the input images), there will be <hidden> hidden units,
 and one output unit, if the image is a + then the output should be 1, otherwise 
 it should be 0. The learning factor is set to 0.5"""
 
-inputs = 900
+img_ht = 30
+img_wdt = 30
+
+inputs = img_ht*img_wdt
 hidden = 900
 
 # input layer to hidden layer weights and hidden layer to output layer weights
@@ -58,20 +61,25 @@ for p in range(1,len(sys.argv)):
     #images all the three values are the same, so taking just one from 
     #them and assigning them to the input units
     for vali in range(inputs):
-        input_units[vali] = pixel_li[vali][0]
+        input_units[vali] = float(pixel_li[vali][0])
     
     #calculate activations for the hidden units
     for vali in range(hidden):
         for valj in range(inputs):
-            hidden_units[vali]= hidden_units[vali] + input_units[valj]*itoh_wts[vali][valj]
+            hidden_units[vali]=float( hidden_units[vali] + input_units[valj]*itoh_wts[vali][valj])
 
-    #we should remember to print the weights itoh_wts as an image or atleas the hidden unit activations"
+    #we should remember to print the weights itoh_wts as an image "
     
-    im_repr = Image.new("RGB",(40,60))
+    im_repr = Image.new("RGB",(hidden, inputs))
     #lets fill in the RGB values
-    put_list=[ ( value,value,value) for value in hidden_units]
-    print len(put_list)
-    im_repr.putdata(put_list)
+    pix = im_repr.load()
+    for vali in range(hidden):
+        for valj in range(inputs):
+            temp1 = itoh_wts[vali][valj]
+            temp1_str = str(temp1)
+            temp1 = float(temp1_str[:temp1_str.index(".")+3])
+            pix[vali, valj] = (temp1, temp1, temp1)
+    
     im_repr.save("store_"+pre+".png")
     
     #calculating the final result
@@ -87,6 +95,7 @@ for p in range(1,len(sys.argv)):
             print "Image recognized as plus but is minus"
         else:
             print "Image recognized as minus but is plus"
+        print "Updating Weights"    
         #perform back propagation to update the weights
         #the weights have to be updated using the following rules 
         #   change in htoo_wts[i][j] = n*sum_over_i((result[i]-class_val[i])hidden_units[j]
