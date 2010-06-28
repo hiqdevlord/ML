@@ -4,9 +4,13 @@ from PIL import Image
 """We are goiing to use a MLP with one layer of hidden units to store two classes of images, 
 one which contains a + and the other which contains a -. PIL will be used 
 to get the pixel values and pass it as input to the MLP. The images considered 
-will be 30x30, so there will be 900 input units, there will be 2400 hidden units,
+will be 30x30, so there will be <inputs> input units(which should be set to the total
+number of pixels in the input images), there will be <hidden> hidden units,
 and one output unit, if the image is a + then the output should be 1, otherwise 
 it should be 0. The learning factor is set to 0.5"""
+
+inputs = 900
+hidden = 900
 
 # input layer to hidden layer weights and hidden layer to output layer weights
 itoh_wts=[]
@@ -17,13 +21,13 @@ n=0.5
 
 
 #lets initialize the weights to some really small values like 0.01
-for vali in range(2400):
+for vali in range(hidden):
     temp_list=[]
-    for valj in range(900):
+    for valj in range(inputs):
         temp_list.append(0.01)
     itoh_wts.append(temp_list)
 
-for vali in range(2400):
+for vali in range(hidden):
     htoo_wts.append(0.01)
 
 
@@ -35,9 +39,9 @@ for p in range(1,len(sys.argv)):
     #reinitialize input units and hidden units
     input_units=[]
     hidden_units=[]
-    for vali in range(2400):
+    for vali in range(hidden):
         hidden_units.append(0)
-    for vali in range(900):
+    for vali in range(inputs):
         input_units.append(0)
     pre, ext = sys.argv[p].split('.')
     if pre.endswith("plus"):
@@ -53,12 +57,12 @@ for p in range(1,len(sys.argv)):
     #the getdata return a three valued tuple for each pixel, for our 
     #images all the three values are the same, so taking just one from 
     #them and assigning them to the input units
-    for vali in range(900):
+    for vali in range(inputs):
         input_units[vali] = pixel_li[vali][0]
     
     #calculate activations for the hidden units
-    for vali in range(2400):
-        for valj in range(900):
+    for vali in range(hidden):
+        for valj in range(inputs):
             hidden_units[vali]= hidden_units[vali] + input_units[valj]*itoh_wts[vali][valj]
 
     #we should remember to print the weights itoh_wts as an image or atleas the hidden unit activations"
@@ -72,7 +76,7 @@ for p in range(1,len(sys.argv)):
     
     #calculating the final result
     output = 0
-    for vali in range(2400):
+    for vali in range(hidden):
         output = output + hidden_units[vali]*htoo_wts[vali]
     #calculating the sigmoid 
     class_val = 1/(1+exp(-output))
@@ -93,13 +97,13 @@ for p in range(1,len(sys.argv)):
         # should first update the first layer weigts and then the second layer weights
         #updating first layer weights
         htoo_wts_sum = 0
-        for j in range(2400):
+        for j in range(hidden):
             htoo_wts_sum = htoo_wts_sum + diff*htoo_wts[j]
-        for j in range(2400):
-            for q in range(900):
+        for j in range(hidden):
+            for q in range(inputs):
                 itoh_wts[j][q] = itoh_wts[j][q] + n*(htoo_wts_sum*hidden_units[j]*(1-hidden_units[j])*input_units[q])
         #update second layer weights
-        for j in range(2400):
+        for j in range(hidden):
             htoo_wts[j] = htoo_wts[j] + n*diff*hidden_units[j]
 
     else :
