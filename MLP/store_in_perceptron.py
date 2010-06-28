@@ -1,9 +1,14 @@
 import sys
 from numpy import exp
 from PIL import Image
-"""We are goiing to use a MLP with one layer of hidden units to store two classes of images, one which contains a + and the other which contains a -. PIL will be used to get the pixel values and pass it as input to the MLP. The images considered will be 30x30, so there will be 900 input units, there will be 2400 hidden units, and one output unit, if the image is a + then the output should be 1, otherwise it should be 0. The learning factor is set to 0.5"""
+"""We are goiing to use a MLP with one layer of hidden units to store two classes of images, 
+one which contains a + and the other which contains a -. PIL will be used 
+to get the pixel values and pass it as input to the MLP. The images considered 
+will be 30x30, so there will be 900 input units, there will be 2400 hidden units,
+and one output unit, if the image is a + then the output should be 1, otherwise 
+it should be 0. The learning factor is set to 0.5"""
 
-
+# input layer to hidden layer weights and hidden layer to output layer weights
 itoh_wts=[]
 htoo_wts=[]
 
@@ -11,18 +16,19 @@ htoo_wts=[]
 n=0.5
 
 
-#lets initialize the weights to some really small values like 0.1
+#lets initialize the weights to some really small values like 0.01
 for vali in range(2400):
     temp_list=[]
     for valj in range(900):
-        temp_list.append(0.1)
+        temp_list.append(0.01)
     itoh_wts.append(temp_list)
 
 for vali in range(2400):
-    htoo_wts.append(0.1)
+    htoo_wts.append(0.01)
 
 
-#we will use just the sum function at the hidden layer, at the output layer we will use the sigmoid
+#we will use just the sum function at the hidden layer
+#at the output layer we will use the sigmoid as the threshold function
 
 #lets get the image first, the testing images should be passed as arguments.
 for p in range(1,len(sys.argv)):
@@ -101,8 +107,3 @@ for p in range(1,len(sys.argv)):
             print "Image correctly recognised as plus"
         else:
             print "Image correctly recognised as minus"
-
-
-            
-                
-
