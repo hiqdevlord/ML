@@ -1,3 +1,4 @@
 Contains implementations of various machine learning and related algorithms, grouped by their general categories : 
 
 bayes/ --> general bayes classifiers related code
+MLP/   --> Multilayer Perceptron with backpropagation for weight updation
