@@ -69,7 +69,7 @@ for p in range(1,len(sys.argv)):
     
     im_repr = Image.new("RGB",(40,60))
     #lets fill in the RGB values
-    put_list=[ (value%256,value%256,value%256) for value in hidden_units]
+    put_list=[ ( value,value,value) for value in hidden_units]
     print len(put_list)
     im_repr.putdata(put_list)
     im_repr.save("store_"+pre+".png")
