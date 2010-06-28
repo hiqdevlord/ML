@@ -10,29 +10,29 @@ number of pixels in the input images), there will be <hidden> hidden units,
 and one output unit, if the image is a + then the output should be 1, otherwise 
 it should be 0. The learning factor is set to 0.5"""
 
-img_ht = 30
-img_wdt = 30
+img_ht = 50
+img_wdt = 50
 
 inputs = img_ht*img_wdt
-hidden = 900
+hidden = 1000
 
 # input layer to hidden layer weights and hidden layer to output layer weights
 itoh_wts=[]
 htoo_wts=[]
 
 #learning factor
-n=0.75
+n=0.2
 
 
 #lets initialize the weights to some really small values like 0.01
 for vali in range(hidden):
     temp_list=[]
     for valj in range(inputs):
-        temp_list.append(0.1)
+        temp_list.append(0.05)
     itoh_wts.append(temp_list)
 
 for vali in range(hidden):
-    htoo_wts.append(0.1)
+    htoo_wts.append(0.05)
 
 
 #we will use just the sum function at the hidden layer
@@ -119,9 +119,9 @@ for p in range(1,len(sys.argv)):
 y_list=[]
 for value in itoh_wts:
     y_list.extend(value)
-x_list = range(1,hidden*inputs+1)
+x_list = range(221,1088)
 pylab.xlabel("Weight value")
 pylab.ylabel("Actual weights")
-pylab.plot(x_list, y_list)
+pylab.plot(x_list, y_list[221:1088])
 pylab.savefig("weight_graph.png")
 pylab.show()
