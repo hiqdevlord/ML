@@ -1,4 +1,5 @@
 import sys
+import pylab
 from numpy import exp
 from PIL import Image
 """We are goiing to use a MLP with one layer of hidden units to store two classes of images, 
@@ -20,18 +21,18 @@ itoh_wts=[]
 htoo_wts=[]
 
 #learning factor
-n=0.5
+n=0.75
 
 
 #lets initialize the weights to some really small values like 0.01
 for vali in range(hidden):
     temp_list=[]
     for valj in range(inputs):
-        temp_list.append(0.01)
+        temp_list.append(0.1)
     itoh_wts.append(temp_list)
 
 for vali in range(hidden):
-    htoo_wts.append(0.01)
+    htoo_wts.append(0.1)
 
 
 #we will use just the sum function at the hidden layer
@@ -69,18 +70,9 @@ for p in range(1,len(sys.argv)):
             hidden_units[vali]=float( hidden_units[vali] + input_units[valj]*itoh_wts[vali][valj])
 
     #we should remember to print the weights itoh_wts as an image "
-    
-    im_repr = Image.new("RGB",(hidden, inputs))
-    #lets fill in the RGB values
-    pix = im_repr.load()
-    for vali in range(hidden):
-        for valj in range(inputs):
-            temp1 = itoh_wts[vali][valj]
-            temp1_str = str(temp1)
-            temp1 = float(temp1_str[:temp1_str.index(".")+3])
-            pix[vali, valj] = (temp1, temp1, temp1)
-    
-    im_repr.save("store_"+pre+".png")
+    #we are not doing it right now since the PIL functions are 
+    #mostly showing overflow errors with long , instead we will plot a graph
+    #towards the end of the processing
     
     #calculating the final result
     output = 0
@@ -89,6 +81,8 @@ for p in range(1,len(sys.argv)):
     #calculating the sigmoid 
     class_val = 1/(1+exp(-output))
     print class_val
+    #if class_val >= 0.5 :
+    #   class_val = 1
 
     if result != class_val:
         if class_val == 1:
@@ -120,3 +114,14 @@ for p in range(1,len(sys.argv)):
             print "Image correctly recognised as plus"
         else:
             print "Image correctly recognised as minus"
+
+#lets print a graph of the final weights 
+y_list=[]
+for value in itoh_wts:
+    y_list.extend(value)
+x_list = range(1,hidden*inputs+1)
+pylab.xlabel("Weight value")
+pylab.ylabel("Actual weights")
+pylab.plot(x_list, y_list)
+pylab.savefig("weight_graph.png")
+pylab.show()
