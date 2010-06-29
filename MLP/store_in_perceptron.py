@@ -120,6 +120,7 @@ y_list=[]
 for value in itoh_wts:
     y_list.extend(value)
 x_list = range(221,1088)
+print y_list
 pylab.xlabel("Weight value")
 pylab.ylabel("Actual weights")
 pylab.plot(x_list, y_list[221:1088])
