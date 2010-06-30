@@ -14,14 +14,14 @@ img_ht = 50
 img_wdt = 50
 
 inputs = img_ht*img_wdt
-hidden = 1000
+hidden = 100
 
 # input layer to hidden layer weights and hidden layer to output layer weights
 itoh_wts=[]
 htoo_wts=[]
 
 #learning factor
-n=0.2
+n=0.5
 
 
 #lets initialize the weights to some really small values like 0.01
@@ -62,7 +62,8 @@ for p in range(1,len(sys.argv)):
     #images all the three values are the same, so taking just one from 
     #them and assigning them to the input units
     for vali in range(inputs):
-        input_units[vali] = float(pixel_li[vali][0])
+        #changing the inputs binary values
+        input_units[vali] = float(pixel_li[vali][0]/255)
     
     #calculate activations for the hidden units
     for vali in range(hidden):
@@ -120,9 +121,39 @@ y_list=[]
 for value in itoh_wts:
     y_list.extend(value)
 x_list = range(221,1088)
-print y_list
+#print y_list
 pylab.xlabel("Weight value")
 pylab.ylabel("Actual weights")
 pylab.plot(x_list, y_list[221:1088])
 pylab.savefig("weight_graph.png")
-pylab.show()
+#pylab.show()
+
+# now let us try to retrieve what the MLP has stored in the weights during the training for result = 1
+print "Retrieving the memory of the network ;)"
+hidden_units = []
+inputs_units = []
+result = 1
+for vali in range(hidden):
+    hidden_units.append(0)
+for vali in range(inputs):
+    input_units.append(0)
+for vali in range(hidden):
+    hidden_units[vali] = result * htoo_wts[vali]
+#lets calculate the output at the input layer 
+for vali in range(inputs):
+    temp2 = 0
+    for valj in range(hidden):
+        temp2 = temp2 + hidden_units[valj]*itoh_wts[valj][vali]
+    input_units[vali] = temp2
+
+
+im_retr = Image.new("L", (img_wdt, img_ht))
+pix = im_retr.load()
+for vali in range(img_wdt):
+    for valj in range(img_ht):
+        temp2 = input_units[((vali+1)*(valj+1))-1]
+        pix[vali, valj] = temp2%256
+im_retr.save("Memory.png")
+for value in input_units:
+    print value, "  ", 
+
